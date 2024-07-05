@@ -113,14 +113,12 @@ button {
   border: none;
   color: white;
   background: #400080;
-
+  margin-top: 15px;
+  margin-bottom: 15px;
   cursor: pointer;
 }
 
 button:hover {
   background: #a64dff;
   color: white;
-}
-#demo {
-  font-size: larger;
 }

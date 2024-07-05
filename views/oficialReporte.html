@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="../styles/oficialReporte/index.css" />
   </head>
   <body>
-    <script>
-      function myFunction() {
-        document.getElementById("demo").innerHTML = "Espacios disponibles: 15";
-      }
-    </script>
     <nav>
       <div class="logo">ULACIT Parking</div>
       <div class="nav-items">
@@ -22,7 +17,7 @@
     </nav>
 
     <div class="column-left">
-      <h3>Consulta de espacios por parqueo</h3>
+      <h3>Reporte de espacios por parqueo</h3>
     </div>
 
     <div class="hero-container">
@@ -32,12 +27,18 @@
 
       <div class="login-container">
         <form id="login-form">
-          <label for="username">Número de parqueo: 123</label><br />
-
-          <p id="demo" show>Espacios regulares disponibles: 34</p>
-          <p id="demo" show>Espacios de moto disponibles: 17</p>
-          <p id="demo" show>Espacios ley 7600 disponibles: 3</p>
-          <p id="demo" show>Capacidad de espacios total: 130</p>
+          <select name="parqueo">
+            <option value="norte">Parqueo norte</option>
+            <option value="este">Parqueo este</option>
+            <option value="oeste">Parqueo oeste</option>
+          </select>
+          <br />
+          <button class="login-button" type="button">Consultar parqueo</button>
+          <p></p>
+          <p id="demo1">Espacios regulares disponibles: 34</p>
+          <p id="demo2">Espacios de moto disponibles: 17</p>
+          <p id="demo3">Espacios ley 7600 disponibles: 3</p>
+          <p id="demo4">Capacidad de espacios total: 130</p>
         </form>
       </div>
     </div>
