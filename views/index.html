@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
-    <link rel="stylesheet" href="../styles/main/index.css">
-</head>
-<body>
-    
-    <nav class= "navegador">
-        <div class="logo">ULACIT Parking</div>
-        <div class="nav-items">
-            <a href="">Home</a>
-            <a href="">Acerca de</a>
-            <a href="">Contáctanos</a>
-        </div>
-
+    <link rel="stylesheet" href="../styles/main/index.css" />
+  </head>
+  <body>
+    <nav class="navegador">
+      <div class="logo">ULACIT Parking</div>
+      <div class="nav-items">
+        <a href="">Home</a>
+        <a href="">Acerca de</a>
+        <a href="">Contáctanos</a>
+      </div>
     </nav>
     <div class="hero-container">
-        <div class="column-left">
-            <h1>Sistema de parqueo ULACIT</h1>
-            <p>Sin contratos o cobros no deseados.</p>
-            <p>La primera entrada es gratuita.</p>
-        </div>
-        <div class="imagen">
-            <img src="../assets/images/ulacitlogo.png" alt="ulacit fondo">
-        </div>
-        <div class="login-container">
-            <form id="login-form">
-                <label for="username">Nombre de usuario:</label><br>
-                <input type="text" id="username" name="username"><br><br>
-                <label for="password">Contraseña:</label><br>
-                <input type="password" id="password" name="password"><br><br>
-                <button type="submit">Ingresar</button>
-            </form>
-        </div>
+      <div class="column-left">
+        <h1>Sistema de parqueo ULACIT</h1>
+        <p>Sin contratos o cobros no deseados.</p>
+        <p>La primera entrada es gratuita.</p>
+      </div>
+      <div class="imagen">
+        <img src="../assets/images/ulacitlogo.png" alt="ulacit fondo" />
+      </div>
+      <div class="login-container">
+        <form id="login-form">
+          <label for="username">Nombre de usuario:</label><br />
+          <input type="email" id="username" name="username" /><br /><br />
+          <label for="password">Contraseña:</label><br />
+          <input type="password" id="password" name="password" /><br /><br />
+          <button type="submit" id="login-button">Ingresar</button>
+        </form>
+      </div>
     </div>
-    <section>
-    </section>
-</body>
+    <section></section>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../server/api/supabaseClient.js"></script>
+    <script src="../server/api/login.js"></script>
+    <script src="../server/api/session.js"></script>
+  </body>
 </html>
