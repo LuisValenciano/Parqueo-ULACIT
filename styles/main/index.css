@@ -17,7 +17,18 @@
 
 body{
     background-color: #5900b3;
-
+    background-image: url('../../assets/images/ulacitfondoAdmin.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .navegador {
@@ -90,14 +101,22 @@ button:hover {
 
 @media only screen and (min-width: 768px) {
     .navegador {
-        background: #400080;
+        
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 10px 10px 40px;
         padding-bottom: 30px;
         font-size: large;
-        display: block;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .navegador .nav-items {
+        display: flex;
+        gap: 20px; 
     }
 
     .logo {
@@ -125,7 +144,7 @@ button:hover {
 
     .imagen {
         width: 100%;
-        height: 100%;
+        height: auto;
     }
 
     .login-container {
@@ -147,6 +166,7 @@ button:hover {
     .column-left{
         width: 50%;
         float: left;
+        margin-top: 150px;
     }
 
     .column-left h1{
@@ -161,6 +181,7 @@ button:hover {
         width: 50%;
         padding-top: 30px 0px 0px;
         float: right;
+        margin-top: 150px;
     }
 
     .login-container {
