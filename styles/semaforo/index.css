@@ -10,114 +10,90 @@
   font-family: "CustomFont";
 }
 
-body {
-  background-color: #5900b3;
-  overflow: hidden;
+.hero-container {
+  width: 100%;
+  height: 100%;
 }
 
-nav {
-  height: 80px;
-  background: #5900b3;
+body {
+  background-color: #5900b3;
+  background-image: url("../../assets/images/ulacitfondoAdmin.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 0rem calc((100vw - 1300px) / 2);
-  font-size: large;
+}
+
+.navegador {
+  display: none;
 }
 
 .logo {
   color: white;
   font-size: 2.3rem;
   font-weight: bold;
-  padding: 0 2rem;
+  padding: 10px 30px 15px;
 }
 
 .imagen {
   width: 100%;
+  height: 200px;
+  padding: 30px 0px 40px;
+}
+
+.imagen img {
+  width: 100%;
   height: 100%;
-  background-color: #5900b3;
-  filter: blur(3px);
-  display: flex;
-  position: absolute;
+  /* filter: blur(3px); */
+  object-fit: cover;
 }
 
 nav a {
   text-decoration: none;
   color: white;
-  padding: 0 2rem;
+  padding: 10px 35px 10px;
+}
+
+.login-form {
 }
 
 .login-container {
   border-radius: 10px;
-  font-size: 1.2rem;
-  display: flex;
-  background-color: rgb(221, 132, 16);
+  font-size: 1.5rem;
+  padding: 20px 10px 20px;
   position: relative;
-  top: 250px;
-  left: 410px;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  width: 500px;
-  padding: 20px;
-  text-align: left;
-  margin-bottom: 10px;
+  top: 230px;
+  left: -1100px;
+  background-color: antiquewhite;
+  width: 300px;
+  object-fit: cover;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.column-left {
+.column-left h3 {
   font-size: 2.5rem;
   color: white;
-  font-weight: bold;
-  position: absolute;
-  top: 160px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  width: 80%;
-  padding: 20px;
-  text-align: left;
-  margin-bottom: 10px;
-}
-
-.column-parrafos {
-  font-size: 1.5rem;
-  color: white;
-  position: absolute;
-  top: 46%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-
-  padding: 20px;
-  text-align: left;
-  margin-bottom: 10px;
-}
-.prueba {
+  padding: 5px 10px 20px;
   position: relative;
-  top: 150px;
-  left: 160px;
+  top: -180px;
+  left: 100px;
+  width: 1000px;
 }
 
-.column-button {
-  font-weight: bold;
-  position: relative;
-  top: 150px;
-  left: 160px;
-  z-index: 2;
-  width: 945px;
-  padding: 0px;
-  text-align: left;
-  margin-bottom: 20px;
-}
-.login-button {
-  width: 460px;
-}
 button {
   padding: 1rem 3rem;
   font-size: 1rem;
   border: none;
   color: white;
   background: #400080;
-
   cursor: pointer;
 }
 
@@ -125,6 +101,115 @@ button:hover {
   background: #a64dff;
   color: white;
 }
+
+.column-button {
+  position: relative;
+  top: 170px;
+}
+
+.login-form {
+  width: 300px;
+}
+
+@media only screen and (min-width: 768px) {
+  .navegador {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px 40px;
+    padding-bottom: 30px;
+    font-size: large;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .navegador .nav-items {
+    display: flex;
+    gap: 20px;
+  }
+
+  .logo {
+    font-size: 3rem;
+  }
+
+  nav a {
+    font-size: 1.4rem;
+  }
+
+  .hero-container {
+    width: 600px;
+    margin: 0 auto;
+  }
+
+  .column-left h1 {
+    padding: 30px 0px 10px;
+    font-size: 3rem;
+  }
+
+  .column-left p {
+    padding: 20px 0px 10px;
+    font-size: 1.5rem;
+  }
+
+  .imagen {
+    width: 100%;
+    height: auto;
+  }
+
+  .login-container {
+    font-size: 1.5rem;
+    width: 40%;
+  }
+
+  .login-container button {
+    font-size: 20px;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .hero-container {
+    width: 1000px;
+  }
+
+  .column-left {
+    width: 50%;
+    float: left;
+    margin-top: 150px;
+  }
+
+  .column-left h1 {
+    padding: 40px 30px 0px;
+  }
+
+  .column-left p {
+    padding: 20px 30px 0px;
+  }
+
+  .imagen {
+    width: 50%;
+    padding-top: 30px 0px 0px;
+    float: right;
+    margin-top: 150px;
+  }
+
+  .login-container {
+    font-size: 1.2rem;
+    padding: 20px 30px 20px;
+    background-color: antiquewhite;
+    width: 65%;
+    height: 25%;
+    display: flex;
+
+    transform: translate(110%, 30%);
+  }
+
+  .login-container button {
+    font-size: 1rem;
+  }
+}
+
 .dot {
   height: 200px;
   width: 200px;
@@ -155,8 +240,8 @@ button:hover {
   display: flex;
   background-color: black;
   position: relative;
-  top: 113px;
-  left: 950px;
+  top: 180px;
+  left: 350px;
   transform: translate(-50%, -50%);
   z-index: 2;
   width: 440px;
