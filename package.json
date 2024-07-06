@@ -1,6 +1,11 @@
 {
+  "type": "module",
   "description": "",
   "devDependencies": {
     "supabase": "^1.178.2"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.44.2",
+    "dotenv": "^16.4.5"
   }
 }
