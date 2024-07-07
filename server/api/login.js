@@ -1,3 +1,6 @@
+// Declare a global variable
+var globalIdUsuario;
+
 document.addEventListener("DOMContentLoaded", function () {
   const loginButton = document.getElementById("login-button");
 
@@ -5,34 +8,92 @@ document.addEventListener("DOMContentLoaded", function () {
     loginButton.addEventListener("click", async (e) => {
       e.preventDefault();
 
-      // getting user input
+      // Getting user input
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      // signIn into the db
-      try {
-        const { data, error } = await window.supabase.auth.signInWithPassword({
-          email: username,
-          password: password,
-        });
+      console.log("Username:", username);
+      console.log("Password:", password);
 
-        // handling errors
-        if (error) {
-          alert(`login failed ${error.message}`);
+      try {
+        // Fetch the user from the Usuario table using the email (username)
+        const { data: userData, error: userError, status } = await window.supabase
+          .from("Usuario")
+          .select("*")
+          .eq("email", username)
+          .single();
+
+        if (userError) {
+          console.error("Error fetching user data:", userError);
+          alert(`Login failed: ${userError.message}`);
+          return;
+        }
+
+        if (!userData) {
+          console.log("No user found with that email");
+          alert("Login failed: Invalid credentials");
+          return;
+        }
+
+        console.log("User data fetched:", userData);
+
+        // Check if the password matches (assuming plain text password for now)
+        const passwordMatches = userData.password === password;
+
+        if (!passwordMatches) {
+          console.log("Password does not match");
+          alert("Login failed: Invalid credentials");
+          return;
+        }
+
+        console.log("Password matches");
+
+        // Check if the password is "Ulacit123"
+        if (password === "Ulacit123") {
+          alert("Debe de cambiar su contraseña");
+          sessionStorage.setItem("username", username);
+          sessionStorage.setItem("currentPassword", password);
+          sessionStorage.setItem("idUsuario", userData.idUsuario);  // Ensure idUsuario is stored correctly
+          globalIdUsuario = userData.idUsuario;  // Set global variable
+          console.log("Stored idUsuario:", userData.idUsuario);
+          window.location.href = "/views/PasswordChange.html";
         } else {
-          window.saveUserSession(data.user);
-          //checking if password change needed
-          if (password === "Ulacit123") {
-            alert("Debe de cambiar su contraseña");
-            window.location.href = "/views/PasswordRecovery.html";
-          } else {
-            alert(`Login successful`);
-            window.location.href = "/views/HomePage.html";
+          alert("Login successful");
+          sessionStorage.setItem("username", username);
+          sessionStorage.setItem("currentPassword", password);
+          sessionStorage.setItem("idUsuario", userData.idUsuario);  // Ensure idUsuario is stored correctly
+          globalIdUsuario = userData.idUsuario;  // Set global variable
+          console.log("Stored idUsuario:", userData.idUsuario);
+          window.saveUserSession(userData);
+
+          // Redirect based on user role
+          switch (userData.idRol) {
+            case 1:
+              window.location.href = "/views/Estudiante/estudiantes.html";
+              break;
+            case 2:
+              window.location.href = "/views/Administrativo/landingPageAdministrativo.html";
+              break;
+            case 3:
+              window.location.href = "/views/Guarda/oficialParqueo.html";
+              break;
+            case 4:
+              window.location.href = "/views/Administrador/menuAdministrador.html";
+              break;
+            default:
+              alert("Rol desconocido. Por favor, contacte al administrador.");
+              break;
           }
         }
       } catch (err) {
         console.error("An unexpected error occurred:", err);
+        alert("An unexpected error occurred. Please try again.");
       }
     });
   }
 });
+
+
+
+
+
