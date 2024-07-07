@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="../styles/oficialParqueo/oficialParqueo.css" />
+    <link rel="stylesheet" href="../../styles/oficialReporte/oficialReporte.css" />
   </head>
   <body>
     <nav class="navegador">
@@ -17,31 +17,24 @@
     </nav>
 
     <div class="column-left">
-      <h3>Seleccione la opción deseada:</h3>
+      <h3>Reporte de espacios por parqueo</h3>
     </div>
 
     <div class="hero-container">
-      <div class="column-button">
-        <a href="oficialReporte.html">
-          <button>Reporte de parqueos</button>
-        </a>
-      </div>
-
       <div class="login-container">
         <form id="login-form">
-          <label for="username">Selecciones el parqueo:</label><br />
           <select name="parqueo">
             <option value="norte">Parqueo norte</option>
             <option value="este">Parqueo este</option>
             <option value="oeste">Parqueo oeste</option>
           </select>
           <br />
-          <br />
-          <a href="semaforo.html"
-            ><button class="login-button" type="button">
-              Registrar entrada / salida de vehículos
-            </button></a
-          >
+          <button class="login-button" type="button">Consultar parqueo</button>
+          <p></p>
+          <p id="demo1">Espacios regulares disponibles: 34</p>
+          <p id="demo2">Espacios de moto disponibles: 17</p>
+          <p id="demo3">Espacios ley 7600 disponibles: 3</p>
+          <p id="demo4">Capacidad de espacios total: 130</p>
         </form>
       </div>
     </div>
