@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", function () {
       const currentPassword = getCurrentPasswordFromSession();
       const idUsuario = getIdUsuarioFromSession();
 
-      console.log("Retrieved idUsuario:", idUsuario);  // Debugging line
+      console.log("Retrieved idUsuario:", idUsuario);  // Debugging 
 
       // Password validation
       if (newPassword === "Ulacit123") {
-        alert("La nueva contraseña no puede ser 'Ulacit123'.");
-        console.log("La nueva contraseña no puede ser 'Ulacit123'.");
+        alert("La nueva contraseña no puede ser la default del sistema.");
+        console.log("La nueva contraseña no puede ser la default del sistema.");
         return;
       }
 
@@ -46,8 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       try {
-        console.log("Fetching user data...");  // Debugging line
-        // Fetch the user from the Usuario table using the idUsuario
+        console.log("Fetching user data...");  // Debugging 
+        // Fetch the user from the Usuario table using idUsuario
         const { data: userData, error: userError } = await window.supabase
           .from("Usuario")
           .select("*")
@@ -68,11 +68,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log("User data fetched:", userData);
 
-        console.log("Comparing current password...");  // Debugging line
-        // Check if the current password matches
+        console.log("Comparing current password...");  // Debugging
+        // Check if current password matches
         const currentPasswordMatches = currentPassword === userData.password;
 
-        console.log("currentPasswordMatches:", currentPasswordMatches);  // Debugging line
+        console.log("currentPasswordMatches:", currentPasswordMatches);  // Debugging
 
         if (!currentPasswordMatches) {
           console.log("Current password does not match");
@@ -80,11 +80,11 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
-        console.log("Comparing new password...");  // Debugging line
+        console.log("Comparing new password...");  // Debugging 
         // Check if the new password is different from the current password
         const newPasswordMatches = newPassword === userData.password;
 
-        console.log("newPasswordMatches:", newPasswordMatches);  // Debugging line
+        console.log("newPasswordMatches:", newPasswordMatches);  // Debugging
 
         if (newPasswordMatches) {
           console.log("New password is the same as the current password");
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
-        console.log("Updating password in database...");  // Debugging line
+        console.log("Updating password in database...");  // Debugging
         // Update the user's password in the Usuario table
         const { error: updateError } = await window.supabase
           .from("Usuario")
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "/views/index.html";
       } catch (err) {
         console.error("An unexpected error occurred:", err);
-        console.log("Error stack trace:", err.stack);  // Debugging line
+        console.log("Error stack trace:", err.stack);  // Debugging
         alert("Ocurrió un error inesperado. Por favor, inténtelo de nuevo.");
       }
     });
