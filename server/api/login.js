@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("Password:", password);
 
       try {
-        // Fetch the user from the Usuario table using the email (username)
+        // Fetch the user from the Usuario table using the email 
         const { data: userData, error: userError, status } = await window.supabase
           .from("Usuario")
           .select("*")
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log("User data fetched:", userData);
 
-        // Check if the password matches (assuming plain text password for now)
+        // Check if the password matches
         const passwordMatches = userData.password === password;
 
         if (!passwordMatches) {
@@ -48,25 +48,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log("Password matches");
 
-        // Check if the password is "Ulacit123"
+        // check if the password is "Ulacit123"
         if (password === "Ulacit123") {
           alert("Debe de cambiar su contraseña");
           sessionStorage.setItem("username", username);
           sessionStorage.setItem("currentPassword", password);
-          sessionStorage.setItem("idUsuario", userData.idUsuario);  // Ensure idUsuario is stored correctly
-          globalIdUsuario = userData.idUsuario;  // Set global variable
+          sessionStorage.setItem("idUsuario", userData.idUsuario);  // saves idUsuario
+          globalIdUsuario = userData.idUsuario;  // global variable
           console.log("Stored idUsuario:", userData.idUsuario);
           window.location.href = "/views/PasswordChange.html";
         } else {
           alert("Login successful");
           sessionStorage.setItem("username", username);
           sessionStorage.setItem("currentPassword", password);
-          sessionStorage.setItem("idUsuario", userData.idUsuario);  // Ensure idUsuario is stored correctly
+          sessionStorage.setItem("idUsuario", userData.idUsuario);  // make sure idUsuario is stored correctly
           globalIdUsuario = userData.idUsuario;  // Set global variable
           console.log("Stored idUsuario:", userData.idUsuario);
           window.saveUserSession(userData);
 
-          // Redirect based on user role
+          // Redirect based on role
           switch (userData.idRol) {
             case 1:
               window.location.href = "/views/Estudiante/estudiantes.html";
