@@ -1,0 +1,207 @@
+@font-face {
+  font-family: "CustomFont";
+  src: url("../../assets/Fonts/Roboto-Regular.ttf");
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "CustomFont";
+}
+
+.hero-container {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background-color: #5900b3;
+  background-image: url("../../assets/images/ulacitfondoAdmin.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navegador {
+  display: none;
+}
+
+.logo {
+  color: white;
+  font-size: 2.3rem;
+  font-weight: bold;
+  padding: 10px 30px 15px;
+}
+
+.imagen {
+  width: 100%;
+  height: 200px;
+  padding: 30px 0px 40px;
+}
+
+.imagen img {
+  width: 100%;
+  height: 100%;
+  /* filter: blur(3px); */
+  object-fit: cover;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+  padding: 10px 35px 10px;
+}
+
+.login-container {
+  border-radius: 10px;
+  font-size: 1.5rem;
+  padding: 20px 10px 20px;
+  position: relative;
+  top: 230px;
+  left: -1200px;
+  background-color: antiquewhite;
+  width: 300px;
+  object-fit: cover;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.column-left h3 {
+  font-size: 2.5rem;
+  color: white;
+  padding: 5px 10px 20px;
+  position: relative;
+  top: -180px;
+  left: 100px;
+}
+
+button {
+  padding: 1rem 3rem;
+  font-size: 1rem;
+  border: none;
+  color: white;
+  background: #400080;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #a64dff;
+  color: white;
+}
+
+.column-button {
+  position: relative;
+  top: 170px;
+}
+
+.login-form {
+  width: 300px;
+}
+
+@media only screen and (min-width: 768px) {
+  .navegador {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px 40px;
+    padding-bottom: 30px;
+    font-size: large;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .navegador .nav-items {
+    display: flex;
+    gap: 20px;
+  }
+
+  .logo {
+    font-size: 3rem;
+  }
+
+  nav a {
+    font-size: 1.4rem;
+  }
+
+  .hero-container {
+    width: 600px;
+    margin: 0 auto;
+  }
+
+  .column-left h1 {
+    padding: 30px 0px 10px;
+    font-size: 3rem;
+  }
+
+  .column-left p {
+    padding: 20px 0px 10px;
+    font-size: 1.5rem;
+  }
+
+  .imagen {
+    width: 100%;
+    height: auto;
+  }
+
+  .login-container {
+    font-size: 1.5rem;
+    width: 40%;
+  }
+
+  .login-container button {
+    font-size: 20px;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .hero-container {
+    width: 1000px;
+  }
+
+  .column-left {
+    width: 50%;
+    float: left;
+    margin-top: 150px;
+  }
+
+  .column-left h1 {
+    padding: 40px 30px 0px;
+  }
+
+  .column-left p {
+    padding: 20px 30px 0px;
+  }
+
+  .imagen {
+    width: 50%;
+    padding-top: 30px 0px 0px;
+    float: right;
+    margin-top: 150px;
+  }
+
+  .login-container {
+    font-size: 1.2rem;
+    padding: 20px 30px 20px;
+    background-color: antiquewhite;
+    width: 95%;
+    height: 25%;
+    display: flex;
+
+    transform: translate(110%, 30%);
+  }
+
+  .login-container button {
+    font-size: 1rem;
+  }
+}
