@@ -193,6 +193,7 @@ async function getParqueoDByNum(numParqueo) {
   }
 }
 
+//Consulta la tabla de vehiculos para obtener datos
 async function getVehiculoIDDByPlaca(placa) {
   try {
     const { data, error } = await supabase
@@ -203,6 +204,29 @@ async function getVehiculoIDDByPlaca(placa) {
 
     if (error) {
       console.error("Error fetching user ID:", error);
+      return null;
+    }
+
+    return data;
+  } catch (err) {
+    console.error("An unexpected error occurred:", err);
+    return null;
+  }
+}
+
+//Consulta la tabla de bitacora para obtener datos
+async function getBitacoraIDDByIDVehiculo(idVehiculo) {
+  try {
+    const { data, error } = await supabase
+      .from("Bitacora")
+      .select("numMovimiento, idVehiculo, tipoMovimiento, fechaHora")
+      .eq("idVehiculo", idVehiculo)
+      .order("fechaHora", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) {
+      console.error("Error fetching bitacora ID:", error);
       return null;
     }
 
@@ -226,8 +250,16 @@ async function handleIngresarClick(event) {
     // Aquí puedes usar el valor como necesites en tu página semaforo.html
   }
 
-  // Obtiene la placa para verificar si existe en el sistema
+  // Obtiene la placa del html
   const placa = document.getElementById("placa").value;
+
+  //Prueba que el campo no esté vacío
+  if (placa == "") {
+    alert("Campo vacio");
+    return;
+  }
+
+  //Verifica si existe la placa
   var campos = 0;
   console.log("Verificando si la placa ya existe...");
   const { data: existingPlaca, error: checkError } = await supabase
@@ -303,12 +335,29 @@ async function handleIngresarClick(event) {
 
   const fechaHora = today;
 
-  //const idUsuario = 29;
-  const tipoMovimiento = "entrada";
+  var tipo;
+
+  //Verifica si el movimiento es de entrada o salida
+  const bitacora = await getBitacoraIDDByIDVehiculo(idVehiculo);
+  var tipoMovimiento;
+
+  if (bitacora) {
+    console.log(`id de vehículo: ${bitacora.idVehiculo}`);
+    //Se asigna el id del vehículo
+    tipoMovimiento = bitacora.tipoMovimiento;
+    console.log(`tipo de movimiento: ${bitacora.tipo}`);
+    if (tipoMovimiento == "entrada") {
+      tipoMovimiento = "salida";
+    } else {
+      tipoMovimiento = "entrada";
+    }
+  } else {
+    tipoMovimiento = "entrada";
+  }
 
   console.log(`idVehiculo: ${idVehiculo}`); //listo
   console.log(`idUsuario: ${idUsuario}`); //listo
-  console.log(`TipoMovimiento: ${tipoMovimiento}`);
+  console.log(`TipoMovimiento: ${tipoMovimiento}`); //listo
   console.log(`fechaHora: ${fechaHora}`); //listo
   console.log(`idParqueo: ${idParqueo}`); //listo
 
