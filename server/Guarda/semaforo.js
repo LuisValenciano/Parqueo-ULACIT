@@ -173,6 +173,46 @@ async function fetchParqueos() {
   }
 }
 
+async function fetchBitacoraNoRegistro() {
+  try {
+    const { data, error } = await supabase
+      .from("BitacoraNoRegistro")
+      .select("*");
+    if (error) {
+      console.error("Error fetching data:", error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      console.log("No data found");
+      return;
+    }
+
+    console.log("Datos obtenidos de Supabase:", data);
+
+    const tbody = document.querySelector("table tbody");
+    tbody.innerHTML = "";
+
+    document.querySelectorAll('[data-toggle="tooltip"]').forEach((element) => {
+      element.addEventListener("mouseover", function () {
+        const tooltipText = this.getAttribute("title");
+        const tooltip = document.createElement("div");
+        tooltip.className = "tooltip";
+        tooltip.innerText = tooltipText;
+        document.body.appendChild(tooltip);
+        tooltip.style.left = this.getBoundingClientRect().left + "px";
+        tooltip.style.top =
+          this.getBoundingClientRect().top - tooltip.offsetHeight + "px";
+      });
+      element.addEventListener("mouseout", function () {
+        document.querySelector(".tooltip").remove();
+      });
+    });
+  } catch (err) {
+    console.error("An unexpected error occurred:", err);
+  }
+}
+
 async function getParqueoDByNum(numParqueo) {
   try {
     const { data, error } = await supabase
@@ -237,8 +277,45 @@ async function getBitacoraIDDByIDVehiculo(idVehiculo) {
   }
 }
 
+//Consulta la tabla de bitacoraNoRegistro para obtener datos
+async function getBitacoraNoByPlaca(placa) {
+  try {
+    const { data, error } = await supabase
+      .from("BitacoraNoRegistro")
+      .select(
+        "cedula, placa, idParqueo, is7600 , movimiento, fechaHora, tipoVehiculo"
+      )
+      .eq("placa", placa)
+      .order("fechaHora", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) {
+      console.error("Error fetching bitacora :", error);
+      return null;
+    }
+
+    return data;
+  } catch (err) {
+    console.error("An unexpected error occurred:", err);
+    return null;
+  }
+}
+
 async function handleIngresarClick(event) {
   event.preventDefault();
+
+  const ingresarNoRegistroButton =
+    document.getElementById("ingresarNoRegistro");
+
+  if (ingresarNoRegistroButton) {
+    ingresarNoRegistroButton.addEventListener(
+      "click",
+      handleIngresarNoRegistroClick
+    );
+  } else {
+    console.error('El botón con id "ingresar" no fue encontrado.');
+  }
 
   // Se pasa el parámetro o la variable de la ventana anterior para obtenerla aquí
   var params = new URLSearchParams(window.location.search);
@@ -270,17 +347,22 @@ async function handleIngresarClick(event) {
   const vehiculo = await getVehiculoIDDByPlaca(placa);
   var idVehiculo = 0;
   var idUsuario = 0;
-
+  var noRegistrado;
+  var noRegistradoNo;
   if (vehiculo) {
     console.log(`id de vehículo: ${vehiculo.idVehiculo}`);
     //Se asigna el id del vehículo
     idVehiculo = vehiculo.idVehiculo;
-
+    noRegistrado = false;
     idUsuario = vehiculo.duenoID;
   } else {
-    console.log("No se encontró la placa");
-    alert("No se encontró la placa");
-    return;
+    console.log(
+      "No se encontró la placa, solo puede entrar una vez sin registrarse"
+    );
+
+    noRegistrado = true;
+
+    //return;
   }
 
   if (checkError) {
@@ -289,8 +371,8 @@ async function handleIngresarClick(event) {
   }
 
   if (existingPlaca.length < 1) {
-    alert("La placa no está registrada");
-    return;
+    //alert("La placa no está registrada");
+    //return;
   }
 
   //Revisa si el parqueo existe en el sistema
@@ -301,7 +383,6 @@ async function handleIngresarClick(event) {
     .eq("numParqueo", numParqueo);
 
   const parqueo = await getParqueoDByNum(numParqueo);
-  var idparqueo = 0;
 
   if (parqueo) {
     console.log(`Campos: ${parqueo.capacidadRegular}`);
@@ -321,6 +402,7 @@ async function handleIngresarClick(event) {
     return;
   }
 
+  //Obtiene la fecha y hora actual
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
   var mm = String(today.getMonth() + 1).padStart(2, "0");
@@ -331,11 +413,7 @@ async function handleIngresarClick(event) {
 
   today = mm + "-" + dd + "-" + yyyy + " " + hrs + ":" + min + ":" + sec;
 
-  console.log(today);
-
   const fechaHora = today;
-
-  var tipo;
 
   //Verifica si el movimiento es de entrada o salida
   const bitacora = await getBitacoraIDDByIDVehiculo(idVehiculo);
@@ -343,7 +421,7 @@ async function handleIngresarClick(event) {
 
   if (bitacora) {
     console.log(`id de vehículo: ${bitacora.idVehiculo}`);
-    //Se asigna el id del vehículo
+
     tipoMovimiento = bitacora.tipoMovimiento;
     console.log(`tipo de movimiento: ${bitacora.tipo}`);
     if (tipoMovimiento == "entrada") {
@@ -361,16 +439,129 @@ async function handleIngresarClick(event) {
   console.log(`fechaHora: ${fechaHora}`); //listo
   console.log(`idParqueo: ${idParqueo}`); //listo
 
-  const { data2, error2 } = await supabase
-    .from("Bitacora")
-    .insert([{ idVehiculo, idUsuario, tipoMovimiento, fechaHora, idParqueo }]);
+  //elementos a ocultar y mostrar
+  const buttonNoRegistro = document.getElementById("ingresarNoRegistro");
+  const cedulaC = document.getElementById("cedula");
+  const cedulaLabel = document.getElementById("labelCedula");
+  const buttonIngresar = document.getElementById("ingresar");
+  const ley7600 = document.getElementById("7600");
+  const ley7600Label = document.getElementById("label7600");
+  const vehiculoTipo = document.getElementById("vehiculo");
+  const vehiculoLabel = document.getElementById("labelVehiculo");
 
-  if (error2) {
-    console.error("Error inserting data:", error2);
-    return;
+  const bitacoraNoRegistro = await getBitacoraNoByPlaca(placa);
+  var movimiento;
+  var cedula;
+  if (bitacoraNoRegistro) {
+    //Se asigna el tipo de movimiento
+    movimiento = bitacoraNoRegistro.movimiento;
+    cedula = bitacoraNoRegistro.cedula;
+    console.log(`tipo de movimiento: ${bitacoraNoRegistro.movimiento}`);
+    if (movimiento == "entrada") {
+      movimiento = "salida";
+    } else {
+      alert(
+        "Acceso denegado. Solo puede entrar una vez con un vehículo no registrado"
+      );
+      location.reload();
+      cedulaC.style.display = "none";
+      cedulaLabel.style.display = "none";
+      buttonIngresar.style.display = "block";
+      ley7600.style.display = "none";
+      ley7600Label.style.display = "none";
+      buttonNoRegistro.style.display = "none";
+      vehiculoTipo.style.display = "none";
+      vehiculoLabel.style.display = "none";
+
+      return;
+    }
+  } else {
+    movimiento = "entrada";
   }
 
-  alert("Ingresado correctamente");
+  if (noRegistrado && bitacoraNoRegistro) {
+    const tipoVehiculo = document.getElementById("vehiculo").value;
+    cedula = bitacoraNoRegistro.cedula;
+    var is7600 = document.getElementById("7600").value;
+    if (is7600 == "si") {
+      is7600 = true;
+    } else {
+      is7600 = false;
+    }
+    const { data3, error3 } = await supabase.from("BitacoraNoRegistro").insert([
+      {
+        cedula,
+        placa,
+        idParqueo,
+        is7600,
+        movimiento,
+        fechaHora,
+        tipoVehiculo,
+      },
+    ]);
+    alert("Ingresado correctamente en bitacoraNoRegistro");
+
+    location.reload();
+  }
+
+  async function handleIngresarNoRegistroClick(event) {
+    console.log("INGRESANDO SIN REGISTRO");
+    const cedula = document.getElementById("cedula").value;
+    const tipoVehiculo = document.getElementById("vehiculo").value;
+    var is7600 = document.getElementById("7600").value;
+    if (is7600 == "si") {
+      is7600 = true;
+    } else {
+      is7600 = false;
+    }
+
+    const { data3, error3 } = await supabase.from("BitacoraNoRegistro").insert([
+      {
+        cedula,
+        placa,
+        idParqueo,
+        is7600,
+        movimiento,
+        fechaHora,
+        tipoVehiculo,
+      },
+    ]);
+
+    alert("Ingresado correctamente en bitacoraNoRegistro");
+    cedulaC.style.display = "none";
+    cedulaLabel.style.display = "none";
+    buttonIngresar.style.display = "block";
+    ley7600.style.display = "none";
+    ley7600Label.style.display = "none";
+    buttonNoRegistro.style.display = "none";
+    vehiculoTipo.style.display = "none";
+    vehiculoLabel.style.display = "none";
+    location.reload();
+  }
+
+  if (noRegistrado) {
+    cedulaC.style.display = "block";
+    cedulaLabel.style.display = "block";
+    buttonIngresar.style.display = "none";
+    ley7600.style.display = "block";
+    ley7600Label.style.display = "block";
+    buttonNoRegistro.style.display = "block";
+    vehiculoTipo.style.display = "block";
+    vehiculoLabel.style.display = "block";
+  } else {
+    const { data2, error2 } = await supabase
+      .from("Bitacora")
+      .insert([
+        { idVehiculo, idUsuario, tipoMovimiento, fechaHora, idParqueo },
+      ]);
+    location.reload();
+    if (error2) {
+      console.error("Error inserting data:", error2);
+      return;
+    }
+
+    alert("Ingresado correctamente en bitacora");
+  }
 
   fetchBitacora();
 }
@@ -383,7 +574,7 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     console.error('El botón con id "ingresar" no fue encontrado.');
   }
-
+  fetchBitacoraNoRegistro();
   fetchParqueos();
   fetchVehiculos();
   fetchBitacora();
