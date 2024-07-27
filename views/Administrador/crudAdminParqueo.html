@@ -37,6 +37,7 @@
             <th>Capacidad Regular</th>
             <th>Capacidad Motos</th>
             <th>Capacidad 7600</th>
+            <th>Activo</th>
             <th>Acción</th>
           </tr>
         </thead>
@@ -107,32 +108,18 @@
           <div class="form-group">
             <label>Capacidad 7600</label>
             <input type="number" id="editCapacidad7600" class="form-control" min="1" required>
-          </div>   
+          </div>
+          <div class="form-group">
+            <label>Activo</label>
+            <select id="editActivo" class="form-control" required>
+              <option value="true">Sí</option>
+              <option value="false">No</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
           <input type="submit" class="btn btn-success" value="Guardar">
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<!-- Delete Modal HTML -->
-<div id="deleteItemModal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="deleteParqueoForm">
-        <div class="modal-header">                        
-          <h4 class="modal-title">Eliminar Parqueo</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        </div>
-        <div class="modal-body">                    
-          <p>¿Está seguro de que desea eliminar el registro seleccionado?</p>
-          <p class="text-warning"><small>Esta acción no es reversible.</small></p>
-        </div>
-        <div class="modal-footer">
-          <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-          <input type="submit" class="btn btn-danger" value="Eliminar">
         </div>
       </form>
     </div>
