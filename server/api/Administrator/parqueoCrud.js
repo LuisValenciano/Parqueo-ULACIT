@@ -24,15 +24,16 @@ document.addEventListener("DOMContentLoaded", function () {
       tbody.innerHTML = '';
 
       data.forEach(parqueo => {
+        const activo = parqueo.activo ? 'Sí' : 'No';
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${parqueo.numParqueo}</td>
           <td>${parqueo.capacidadRegular}</td>
           <td>${parqueo.capacidadMoto}</td>
           <td>${parqueo.capacidad7600}</td>
+          <td>${activo}</td>
           <td>
-            <a href="#editItemModal" class="edit" data-toggle="modal" data-numparqueo="${parqueo.numParqueo}" data-capacidadregular="${parqueo.capacidadRegular}" data-capacidadmoto="${parqueo.capacidadMoto}" data-capacidad7600="${parqueo.capacidad7600}"><i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i></a>
-            <a href="#deleteItemModal" class="delete" data-toggle="modal" data-numparqueo="${parqueo.numParqueo}"><i class="material-icons" data-toggle="tooltip" title="Eliminar">&#xE872;</i></a>
+            <a href="#editItemModal" class="edit" data-toggle="modal" data-numparqueo="${parqueo.numParqueo}" data-capacidadregular="${parqueo.capacidadRegular}" data-capacidadmoto="${parqueo.capacidadMoto}" data-capacidad7600="${parqueo.capacidad7600}" data-activo="${parqueo.activo}"><i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i></a>
           </td>
         `;
         tbody.appendChild(tr);
@@ -125,19 +126,15 @@ document.addEventListener("DOMContentLoaded", function () {
       const capacidadRegular = button.getAttribute('data-capacidadregular');
       const capacidadMoto = button.getAttribute('data-capacidadmoto');
       const capacidad7600 = button.getAttribute('data-capacidad7600');
+      const activo = button.getAttribute('data-activo') === 'true' ? 'true' : 'false';
 
       document.getElementById('editNumParqueo').value = numParqueo;
       document.getElementById('editCapacidadRegular').value = capacidadRegular;
       document.getElementById('editCapacidadMoto').value = capacidadMoto;
       document.getElementById('editCapacidad7600').value = capacidad7600;
+      document.getElementById('editActivo').value = activo;
 
       document.getElementById('editParqueoForm').dataset.numParqueo = numParqueo;
-    }
-
-    if (event.target.closest('.delete')) {
-      const button = event.target.closest('.delete');
-      const numParqueo = button.getAttribute('data-numparqueo');
-      document.getElementById('deleteParqueoForm').dataset.numParqueo = numParqueo;
     }
   });
 
@@ -148,6 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const capacidadRegular = document.getElementById('editCapacidadRegular');
     const capacidadMoto = document.getElementById('editCapacidadMoto');
     const capacidad7600 = document.getElementById('editCapacidad7600');
+    const activo = document.getElementById('editActivo').value === 'true';
 
     if (!validateInputs(capacidadRegular, capacidadMoto, capacidad7600)) {
       return;
@@ -157,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const { data, error } = await supabase
       .from('Parqueo')
-      .update({ capacidadRegular: capacidadRegular.value, capacidadMoto: capacidadMoto.value, capacidad7600: capacidad7600.value })
+      .update({ capacidadRegular: capacidadRegular.value, capacidadMoto: capacidadMoto.value, capacidad7600: capacidad7600.value, activo })
       .eq('numParqueo', numParqueo);
 
     if (error) {
@@ -167,28 +165,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     alert('Parqueo actualizado exitosamente.');
     $('#editItemModal').modal('hide');
-    fetchParqueos();
-  });
-
-  document.getElementById('deleteParqueoForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-
-    const numParqueo = document.getElementById('deleteParqueoForm').dataset.numParqueo;
-
-    console.log('Eliminando parqueo con numParqueo:', numParqueo);
-
-    const { data, error } = await supabase
-      .from('Parqueo')
-      .delete()
-      .eq('numParqueo', numParqueo);
-
-    if (error) {
-      console.error('Error deleting data:', error);
-      return;
-    }
-
-    alert('Parqueo eliminado exitosamente.');
-    $('#deleteItemModal').modal('hide');
     fetchParqueos();
   });
 

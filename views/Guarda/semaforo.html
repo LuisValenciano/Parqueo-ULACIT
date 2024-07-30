@@ -44,10 +44,35 @@
       <div class="login-container">
         <form id="login-form">
           <label for="placa">Placa del vehículo: </label><br />
-          <input type="text" id="placa" name="placa" /><br /><br />
-
+          <input type="text" id="placa" name="placa" /><br />
+          <label id="labelCedula" for="cedula" style="display: none"
+            >Ingrese la cédula de la persona:
+          </label>
+          <input type="text" id="cedula" name="cedula" style="display: none" />
+          <label id="label7600" for="7600" style="display: none"
+            >Requiere campo para discapacitado:
+          </label>
+          <select id="7600" name="7600" style="display: none">
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+          </select>
+          <label id="labelVehiculo" for="vehiculo" style="display: none"
+            >Tipo de vehículo:
+          </label>
+          <select id="vehiculo" name="vehiculo" style="display: none">
+            <option value="Auto">Auto</option>
+            <option value="Moto">Moto</option>
+          </select>
           <button id="ingresar" class="login-button" type="button">
             Ingresar vehículo
+          </button>
+          <button
+            id="ingresarNoRegistro"
+            class="login-button"
+            type="button"
+            style="display: none"
+          >
+            Ingresar vehículo no registrado
           </button>
         </form>
       </div>

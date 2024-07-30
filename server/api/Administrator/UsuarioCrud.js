@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                     default: rol = 'Desconocido'; break;
                 }
 
+                let activo = usuario.activo ? 'Sí' : 'No';
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${usuario.nombre}</td>
@@ -40,9 +42,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <td>${usuario.cedula}</td>
                     <td>${rol}</td>
                     <td>${usuario.password}</td>
+                    <td>${activo}</td>
                     <td>
-                        <a href="#editItemModal" class="edit" data-toggle="modal" data-cedula="${usuario.cedula}" data-nombre="${usuario.nombre}" data-apellidos="${usuario.apellidos}" data-correo="${usuario.email}" data-fecha="${usuario.fechaNacimiento}" data-rol="${usuario.idRol}" data-contrasena="${usuario.password}"><i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i></a>
-                        <a href="#deleteItemModal" class="delete" data-toggle="modal" data-cedula="${usuario.cedula}"><i class="material-icons" data-toggle="tooltip" title="Eliminar">&#xE872;</i></a>
+                        <a href="#editItemModal" class="edit" data-toggle="modal" data-cedula="${usuario.cedula}" data-nombre="${usuario.nombre}" data-apellidos="${usuario.apellidos}" data-correo="${usuario.email}" data-fecha="${usuario.fechaNacimiento}" data-rol="${usuario.idRol}" data-contrasena="${usuario.password}" data-activo="${usuario.activo}"><i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i></a>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -107,26 +109,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         fetchUsers();
     });
 
-    document.getElementById('deleteUserForm').addEventListener('submit', async function(event) {
-        event.preventDefault();
-
-        const cedula = document.querySelector('#deleteUserForm').dataset.cedula;
-        if (!cedula) {
-            console.log('No users selected for deletion');
-            return;
-        }
-
-        const { data, error } = await supabase.from('Usuario').delete().eq('cedula', cedula);
-
-        if (error) {
-            console.error('Error deleting data:', error);
-            return;
-        }
-
-        $('#deleteItemModal').modal('hide');
-        fetchUsers();
-    });
-
     document.addEventListener('click', function(event) {
         if (event.target.closest('.edit')) {
             const button = event.target.closest('.edit');
@@ -137,6 +119,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const fecha = button.getAttribute('data-fecha');
             const rol = button.getAttribute('data-rol');
             const contrasena = button.getAttribute('data-contrasena');
+            const activo = button.getAttribute('data-activo');
 
             document.getElementById('editNombre').value = nombre;
             document.getElementById('editApellidos').value = apellidos;
@@ -147,13 +130,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             document.getElementById('editRol').value = rol;
             document.getElementById('editContrasena').value = contrasena;
 
-            document.getElementById('editUserForm').dataset.cedula = cedula;
-        }
+            document.getElementById('editActivo').value = activo;
 
-        if (event.target.closest('.delete')) {
-            const button = event.target.closest('.delete');
-            const cedula = button.getAttribute('data-cedula');
-            document.querySelector('#deleteUserForm').dataset.cedula = cedula;
+            document.getElementById('editUserForm').dataset.cedula = cedula;
         }
     });
 
@@ -167,10 +146,11 @@ document.addEventListener('DOMContentLoaded', async function() {
         const fechaNacimiento = document.getElementById('editFechaNacimiento').value;
         const rol = document.getElementById('editRol').value;
         const contrasena = document.getElementById('editContrasena').value;
+        const activo = document.getElementById('editActivo').value === "true";
 
         console.log('Editando usuario con cédula:', cedula);
 
-        const updateData = { nombre, apellidos, email: correo, fechaNacimiento, idRol: parseInt(rol) };
+        const updateData = { nombre, apellidos, email: correo, fechaNacimiento, idRol: parseInt(rol), activo };
         if (contrasena) {
             updateData.password = contrasena;
         }
