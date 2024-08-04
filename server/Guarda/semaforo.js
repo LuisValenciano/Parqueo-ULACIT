@@ -275,7 +275,7 @@ async function getVehiculoIDDByPlaca(placa) {
   }
 }
 
-//Consulta la tabla de bitacora para obtener datos
+//Consulta la tabla de bitacora para obtener un conteo
 async function getBitacoraIDDByIDVehiculo(idVehiculo) {
   try {
     const { data, error } = await supabase
@@ -303,6 +303,29 @@ async function getBitacoraIDDByIDVehiculo(idVehiculo) {
     }
 
     return count;
+  } catch (err) {
+    console.error("An unexpected error occurred:", err);
+    return null;
+  }
+}
+
+//Consulta la tabla de bitacora para obtener un conteo
+async function getBitacora(idVehiculo) {
+  try {
+    const { data, error } = await supabase
+      .from("Bitacora")
+      .select("numMovimiento, idVehiculo, tipoMovimiento, fechaHora")
+      .eq("idVehiculo", idVehiculo)
+      .order("fechaHora", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) {
+      console.error("Error fetching bitacora ID:", error);
+      return null;
+    }
+
+    return data;
   } catch (err) {
     console.error("An unexpected error occurred:", err);
     return null;
@@ -453,7 +476,12 @@ async function handleIngresarClick(event) {
 
   // Verifica si hay campo en el parqueo
   if (campos <= 0) {
-    alert("El parqueo no tiene campo");
+    document.getElementById("rojo").style.backgroundColor = "red";
+    document.getElementById("verde").style.backgroundColor = "rgb(0, 26, 0)";
+    setTimeout(() => {
+      alert("El parqueo no tiene campo");
+    }, 100);
+
     return;
   }
 
@@ -469,14 +497,15 @@ async function handleIngresarClick(event) {
   const fechaHora = today;
 
   //Verifica si el movimiento es de entrada o salida
-  const bitacora = await getBitacoraIDDByIDVehiculo(idVehiculo);
+  const bitacora = await getBitacora(idVehiculo);
+
   var tipoMovimiento;
 
   if (bitacora) {
     console.log(`id de vehículo: ${bitacora.idVehiculo}`);
 
     tipoMovimiento = bitacora.tipoMovimiento;
-    console.log(`tipo de movimiento: ${bitacora.tipo}`);
+
     if (tipoMovimiento == "entrada") {
       tipoMovimiento = "salida";
     } else {
@@ -512,22 +541,25 @@ async function handleIngresarClick(event) {
   if (bitacoraNoRegistro && registros) {
     cedula = bitacoraNoRegistro.cedula;
     const cantidadVehiculos = await placaPorCedula(cedula);
-    if (cantidadVehiculos) {
-      if (cantidadVehiculos.countCedula >= 2) {
-        alert("Acceso denegado. El usuario ya posee dos vehiculos registrados");
 
-        return;
-      }
-    }
     total = registros.count;
     const usuario = await getCeudlaByCedula(cedula);
     //Revisa si aun tiene intentos disponibles si es administrativo o estudiante
     if (total >= 2 && usuario.idRol == 1) {
-      alert("Acceso denegado. Ya no posee mas intentos con este vehículo");
+      document.getElementById("rojo").style.backgroundColor = "red";
+      document.getElementById("verde").style.backgroundColor = "rgb(0, 26, 0)";
+      setTimeout(() => {
+        alert("Acceso denegado. Ya no posee mas intentos con este vehículo");
+      }, 100);
       location.reload();
       return;
     } else if (total >= 6 && usuario.idRol == 2) {
-      alert("Acceso denegado. Ya no posee mas intentos con este vehículo");
+      document.getElementById("rojo").style.backgroundColor = "red";
+      document.getElementById("verde").style.backgroundColor = "rgb(0, 26, 0)";
+      setTimeout(() => {
+        alert("Acceso denegado. Ya no posee mas intentos con este vehículo");
+      }, 100);
+
       location.reload();
       return;
     }
@@ -552,6 +584,8 @@ async function handleIngresarClick(event) {
     } else {
       is7600 = false;
     }
+    document.getElementById("verde").style.backgroundColor = "green";
+    document.getElementById("rojo").style.backgroundColor = "rgb(51, 0, 0)";
     const { data3, error3 } = await supabase.from("BitacoraNoRegistro").insert([
       {
         cedula,
@@ -563,6 +597,7 @@ async function handleIngresarClick(event) {
         tipoVehiculo,
       },
     ]);
+
     alert("Ingresado correctamente en bitacoraNoRegistro");
     location.reload();
   }
@@ -574,7 +609,14 @@ async function handleIngresarClick(event) {
     const cantidadVehiculos = await placaPorCedula(cedula);
     if (cantidadVehiculos) {
       if (cantidadVehiculos.countCedula >= 2) {
-        alert("Acceso denegado. El usuario ya posee dos vehiculos registrados");
+        document.getElementById("rojo").style.backgroundColor = "red";
+        document.getElementById("verde").style.backgroundColor =
+          "rgb(0, 26, 0)";
+        setTimeout(() => {
+          alert(
+            "Acceso denegado. El usuario ya posee dos vehiculos registrados"
+          );
+        }, 100);
 
         return;
       } else {
@@ -586,9 +628,13 @@ async function handleIngresarClick(event) {
     if (usuario) {
       console.log("el usuario existe");
     } else {
-      console.log("el usuario no existe");
-      alert("La cédula ingresada no está en el sistema");
+      document.getElementById("rojo").style.backgroundColor = "red";
+      document.getElementById("verde").style.backgroundColor = "rgb(0, 26, 0)";
+      setTimeout(() => {
+        alert("La cédula ingresada no está en el sistema");
+      }, 100);
       return;
+      location.reload();
     }
     const tipoVehiculo = document.getElementById("vehiculo").value;
     var is7600 = document.getElementById("7600").value;
@@ -597,7 +643,8 @@ async function handleIngresarClick(event) {
     } else {
       is7600 = false;
     }
-
+    document.getElementById("verde").style.backgroundColor = "green";
+    document.getElementById("rojo").style.backgroundColor = "rgb(51, 0, 0)";
     const { data3, error3 } = await supabase.from("BitacoraNoRegistro").insert([
       {
         cedula,
@@ -633,6 +680,8 @@ async function handleIngresarClick(event) {
     vehiculoTipo.style.display = "block";
     vehiculoLabel.style.display = "block";
   } else {
+    document.getElementById("verde").style.backgroundColor = "green";
+    document.getElementById("rojo").style.backgroundColor = "rgb(51, 0, 0)";
     const { data2, error2 } = await supabase
       .from("Bitacora")
       .insert([
@@ -658,8 +707,4 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     console.error('El botón con id "ingresar" no fue encontrado.');
   }
-  fetchBitacoraNoRegistro();
-  fetchParqueos();
-  fetchVehiculos();
-  fetchBitacora();
 });

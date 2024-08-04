@@ -219,19 +219,11 @@ button:hover {
 }
 
 #rojo {
-  background-color: rgb(71, 0, 0);
-}
-
-#rojo:hover {
-  background-color: red;
+  background-color: rgb(51, 0, 0);
 }
 
 #verde {
-  background-color: rgb(0, 43, 0);
-}
-
-#verde:hover {
-  background-color: green;
+  background-color: rgb(0, 26, 0);
 }
 
 .semaforo {
